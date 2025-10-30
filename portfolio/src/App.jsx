@@ -1,4 +1,4 @@
-import './App.css';  // Assuming Tailwind is imported here
+import './App.css';  
 import 'lenis/dist/lenis.css';
 import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
@@ -7,8 +7,26 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
-
+  const headerRef = useRef(null);  
   const lenisRef = useRef(null);
+
+  useEffect(() => {
+    if (headerRef.current) {
+      gsap.to(headerRef.current, {
+        scale: 0.5,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: headerRef.current,
+          start: 'top top',
+          end: '50% top',  
+          scrub: true,     
+          
+        },
+      });
+    }
+
+    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
+  }, []);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -28,28 +46,39 @@ function App() {
     return () => {
       lenis.destroy();
     };
-  }, []); 
+  }, []);
 
   const scrollToTop = () => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, {
         duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),  
-        lerp: 0.1,  
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        lerp: 0.1,
       });
     }
   };
 
   return (
     <>
-      <main className="min-h-screen text-black bg-linear-to-br from-gray-50 to-gray-300 flex items-center justify-center text-center p-8">
-        <div>
-          <h1 className="font-bold text-6xl mb-4 bg-linear-to-br from-blue-400 to-purple-600 text-transparent bg-clip-text">Front End Developer Portfolio</h1>
-          <p className="text-xl bg-linear-to-br from-blue-400 to-purple-600 text-transparent bg-clip-text">Scroll down to see what I've been up to</p>
+      <header
+        ref={headerRef}
+        className="fixed top-0 left-0 w-full h-screen overflow-hidden bg-black z-10"
+      >
+        <div className="w-full h-full bg-[#fcfcfc] flex items-center justify-center text-white">
+          <div className="text-center p-8">
+            <h1 className="font-bold text-6xl mb-4 bg-linear-to-br from-[#095297] to-[#1872c6] bg-clip-text text-transparent">
+              Front End Developer Portfolio
+            </h1>
+            <p className="text-xl bg-linear-to-br from-[#095297] to-[#1872c6] bg-clip-text text-transparent">
+              Scroll down to see what I've been up to
+            </p>
+          </div>
         </div>
-      </main>
+      </header>
 
-      <section className="h-screen bg-gray-100 flex items-center justify-center p-8">
+      <div className="h-screen"></div>
+
+      <section className="h-screen bg-gray-100 flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-6 text-gray-800">Section 1: Introduction</h2>
           <p className="text-lg leading-relaxed">
@@ -61,7 +90,7 @@ function App() {
         </div>
       </section>
 
-      <section className="h-screen bg-white flex items-center justify-center p-8">
+      <section className="h-screen bg-white flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-6 text-gray-800">Section 2: Features</h2>
           <ul className="text-left max-w-2xl mx-auto text-lg space-y-4">
@@ -84,7 +113,7 @@ function App() {
         </div>
       </section>
 
-      <section className="h-screen bg-gray-200 flex items-center justify-center p-8">
+      <section className="h-screen bg-gray-200 flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-6 text-gray-800">Section 3: Why Lenis?</h2>
           <p className="text-lg leading-relaxed">
@@ -113,13 +142,16 @@ function App() {
         </div>
       </section>
 
-      <section className="h-screen bg-blue-50 flex items-center justify-center p-8">
+      <section className="h-screen bg-blue-50 flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-6 text-gray-800">Footer Section</h2>
           <p className="text-xl">
             You've reached the end! Smooth scrolling magic courtesy of Lenis. Tweak the options in the useEffect to experiment.
           </p>
-          <button onClick={scrollToTop} className="mt-6 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+          <button
+            onClick={scrollToTop}
+            className="mt-6 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+          >
             Back to Top (Scroll Up!)
           </button>
         </div>
