@@ -2,6 +2,9 @@ import './App.css';  // Assuming Tailwind is imported here
 import 'lenis/dist/lenis.css';
 import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 
 function App() {
 
