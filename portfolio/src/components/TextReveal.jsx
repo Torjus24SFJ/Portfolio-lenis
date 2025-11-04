@@ -1,24 +1,26 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
-export default function TextReveal({ text, split = "word", className = ""}) {
+export default function TextReveal({ text, split = "word", className = "", fonts = [] }) {
   const textRef = useRef(null);
 
   useEffect(() => {
     if (!textRef.current) return;
-
     const element = textRef.current;
 
-    const words = split === "word" ? text.split(" ") : [text];
-    element.innerHTML = words
-      .map((word, i) => {
-        const space = i < words.length - 1 ? " " : "";
-        return `<span class="mask-inner">${word}<span class="mask"></span></span>${space}`;
-      })
-      .join("");
+    if (split === "word") {
+      const words = Array.isArray(text) ? text : text.split(" ");
+      element.innerHTML = words
+        .map((word, i) => {
+          const fontClass = fonts[i] || "";
+          return `<span class="mask-inner ${fontClass}" style="position: relative;">${word}<span class="mask"></span></span>`;
+        })
+        .join(" ");
+    } else {
+      element.textContent = text;
+    }
 
     const masks = element.querySelectorAll(".mask");
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -38,13 +40,8 @@ export default function TextReveal({ text, split = "word", className = ""}) {
     );
 
     observer.observe(element);
-
     return () => observer.disconnect();
-  }, [text, split]);
+  }, [text, split, fonts]);
 
-    return (
-    <p ref={textRef} className={`reveal-text ${className}`}>
-      {text}
-    </p>
-  );
+  return <p ref={textRef} className={`reveal-text ${className}`}>{Array.isArray(text) ? text.join(" ") : text}</p>;
 }

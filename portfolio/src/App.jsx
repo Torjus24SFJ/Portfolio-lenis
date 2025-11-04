@@ -146,23 +146,29 @@ function App() {
       <div className="h-screen"></div>
 
       <section className="h-screen bg-[#282c20] flex items-center justify-center p-8 relative z-0">
-        <div className="max-w-4xl mx-auto text-center">
-          <TextReveal text="Section 1: Introduction" className="text-4xl font-bold mb-6 uppercase" />
-          <TextReveal text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum." className="text-lg leading-relaxed" />
+        <div className="max-w-4xl mx-auto text-center text-white text-6xl font-bold mb-6 uppercase">
+          <TextReveal
+            text={["Redefining", "limits"]}
+            fonts={["font-cinzel", "font-sans"]}
+           />
+          <TextReveal
+            text={["Fighting for", "wins"]}
+            fonts={["font-sans", "font-cinzel"]}
+           />
+          <TextReveal text="Bringing it all in" />
+          <TextReveal text="All ways. Defining a" />
+          <TextReveal
+            text={["Legacy", "in formula 1"]}
+            fonts={["font-cinzel", "font-sans"]}
+           />
+          <TextReveal text="On and off the" />
+          <TextReveal text="Track" />
         </div>
       </section>
 
       <section className="h-screen bg-[#282c20] flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6">
-            Section 2: Features
-          </h2>
+          <h2 className="text-4xl font-bold mb-6">Section 2: Features</h2>
           <ul className="text-left max-w-2xl mx-auto text-lg space-y-4">
             <li className="flex items-center">
               •{" "}
@@ -195,9 +201,7 @@ function App() {
 
       <section className="h-screen bg-[#282c20] flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6">
-            Section 3: Why Lenis?
-          </h2>
+          <h2 className="text-4xl font-bold mb-6">Section 3: Why Lenis?</h2>
           <p className="text-lg leading-relaxed">
             In a world of janky scroll behaviors, Lenis stands out by hijacking
             native scroll events and transforming them into silky-smooth motion.
