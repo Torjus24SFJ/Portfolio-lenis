@@ -10,68 +10,73 @@ function App() {
   const headerRef = useRef(null);
   const lenisRef = useRef(null);
 
-  useEffect(() => {
-    if (headerRef.current) {
-      gsap.to(headerRef.current, {
-        scale: 0.5,
-        ease: "none",
-        scrollTrigger: {
-          trigger: headerRef.current,
-          start: "top top",
-          end: "top -100%",
-          scrub: true,
-          pin: true,
-          onLeave: () => {
-            headerRef.current.style.position = "static";
-          },
-          onEnterBack: () => {
-            headerRef.current.style.position = "fixed";
-          },
+ useEffect(() => {
+  if (headerRef.current) {
+    gsap.to(headerRef.current, {
+      scale: 0.5,
+      ease: "none",
+      scrollTrigger: {
+        trigger: headerRef.current,
+        start: "top top",
+        end: "top -100%",
+        scrub: true,
+        pin: true,
+        onLeave: () => {
+          headerRef.current.style.position = "static";
         },
-      });
-    }
-
-    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
-  }, []);
+        onEnterBack: () => {
+          headerRef.current.style.position = "fixed";
+        },
+        onUpdate: (self) => {
+          const overlay = document.getElementById("header-dark-overlay");
+          if (overlay) {
+            overlay.style.opacity = self.progress * 0.7;
+          }
+        }
+      }
+    });
+  }
+  return () => ScrollTrigger.getAll().forEach((t) => t.kill());
+}, []);
 
   useEffect(() => {
-  const canvas = document.getElementById("bg-canvas");
-  const ctx = canvas.getContext("2d");
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
+    const canvas = document.getElementById("bg-canvas");
+    const ctx = canvas.getContext("2d");
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
 
-  let particles = Array.from({ length: 40 }, () => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    r: 8 + Math.random() * 16,
-    dx: -0.5 + Math.random(),
-    dy: -0.5 + Math.random(),
-  }));
+    let particles = Array.from({ length: 40 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: 8 + Math.random() * 16,
+      dx: -0.5 + Math.random(),
+      dy: -0.5 + Math.random(),
+    }));
 
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
-      ctx.fillStyle = "rgba(68, 165, 247, 0.3)";
-      ctx.fill();
-      p.x += p.dx;
-      p.y += p.dy;
-      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-    });
-    requestAnimationFrame(animate);
-  }
-  animate();
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+        ctx.fillStyle = "rgba(68, 165, 247, 0.3)";
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
 
-  return () => {
-    window.removeEventListener('resize', resizeCanvas);
-  };
-}, []);
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+    };
+  }, []);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -104,7 +109,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="bg-[#282c20]">
       <header
         ref={headerRef}
         className="fixed top-0 left-0 w-full h-screen overflow-hidden bg-black z-10"
@@ -119,10 +124,20 @@ function App() {
             </p>
           </div>
         </div>
+        <div
+          id="header-dark-overlay"
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "#282c20",
+            pointerEvents: "none",
+            zIndex: 2,
+            opacity: 0,
+            transition: "opacity 0.2s linear",
+          }}
+        ></div>
       </header>
-      <canvas id="bg-canvas">
-
-      </canvas>
+      <canvas id="bg-canvas"></canvas>
 
       <div className="h-screen"></div>
 
