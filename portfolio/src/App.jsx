@@ -4,79 +4,81 @@ import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import TextReveal from "./components/TextReveal";
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const headerRef = useRef(null);
   const lenisRef = useRef(null);
 
- useEffect(() => {
-  if (headerRef.current) {
-    gsap.to(headerRef.current, {
-      scale: 0.5,
-      ease: "none",
-      scrollTrigger: {
-        trigger: headerRef.current,
-        start: "top top",
-        end: "top -100%",
-        scrub: true,
-        pin: true,
-        onLeave: () => {
-          headerRef.current.style.position = "static";
-        },
-        onEnterBack: () => {
-          headerRef.current.style.position = "fixed";
-        },
-        onUpdate: (self) => {
-          const overlay = document.getElementById("header-dark-overlay");
-          if (overlay) {
-            overlay.style.opacity = self.progress * 0.7;
-          }
-        }
-      }
-    });
-  }
-  return () => ScrollTrigger.getAll().forEach((t) => t.kill());
-}, []);
-
   useEffect(() => {
-    const canvas = document.getElementById("bg-canvas");
-    const ctx = canvas.getContext("2d");
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
+    if (headerRef.current) {
+      gsap.to(headerRef.current, {
+        scale: 0.5,
+        ease: "none",
+        scrollTrigger: {
+          trigger: headerRef.current,
+          start: "top top",
+          end: "top -100%",
+          scrub: true,
+          pin: true,
+          onLeave: () => {
+            headerRef.current.style.position = "static";
+          },
+          onEnterBack: () => {
+            headerRef.current.style.position = "fixed";
+          },
+          onUpdate: (self) => {
+            const overlay = document.getElementById("header-dark-overlay");
 
-    let particles = Array.from({ length: 40 }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: 8 + Math.random() * 16,
-      dx: -0.5 + Math.random(),
-      dy: -0.5 + Math.random(),
-    }));
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((p) => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
-        ctx.fillStyle = "rgba(68, 165, 247, 0.3)";
-        ctx.fill();
-        p.x += p.dx;
-        p.y += p.dy;
-        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+            if (overlay) {
+              overlay.style.opacity = self.progress * 0.8;
+            }
+          },
+        },
       });
-      requestAnimationFrame(animate);
     }
-    animate();
-
-    return () => {
-      window.removeEventListener("resize", resizeCanvas);
-    };
+    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, []);
+
+  // useEffect(() => {
+  //   const canvas = document.getElementById("bg-canvas");
+  //   const ctx = canvas.getContext("2d");
+  //   function resizeCanvas() {
+  //     canvas.width = window.innerWidth;
+  //     canvas.height = window.innerHeight;
+  //   }
+  //   resizeCanvas();
+  //   window.addEventListener("resize", resizeCanvas);
+
+  //   let particles = Array.from({ length: 40 }, () => ({
+  //     x: Math.random() * canvas.width,
+  //     y: Math.random() * canvas.height,
+  //     r: 8 + Math.random() * 16,
+  //     dx: -0.5 + Math.random(),
+  //     dy: -0.5 + Math.random(),
+  //   }));
+
+  //   function animate() {
+  //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //     particles.forEach((p) => {
+  //       ctx.beginPath();
+  //       ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+  //       ctx.fillStyle = "rgba(68, 165, 247, 0.3)";
+  //       ctx.fill();
+  //       p.x += p.dx;
+  //       p.y += p.dy;
+  //       if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+  //       if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+  //     });
+  //     requestAnimationFrame(animate);
+  //   }
+  //   animate();
+
+  //   return () => {
+  //     window.removeEventListener("resize", resizeCanvas);
+  //   };
+  // }, []);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -109,18 +111,20 @@ function App() {
   };
 
   return (
-    <div className="bg-[#282c20]">
+    <div className="bg-[#282c20] text-[#3669a8]">
       <header
         ref={headerRef}
         className="fixed top-0 left-0 w-full h-screen overflow-hidden bg-black z-10"
       >
-        <div className="w-full h-full bg-[#fcfcfc] flex items-center justify-center text-white">
-          <div className="text-center p-8">
-            <h1 className="font-bold text-6xl mb-4 bg-linear-to-br from-[#095297] to-[#1872c6] bg-clip-text text-transparent">
-              Front End Developer Portfolio
-            </h1>
+        <div className="w-full h-full flex items-center justify-center text-white bg-[#fcfcfc]">
+          <div className="text-center p-8 flex justify-center items-center">
+            <img
+              src="/images/test-image.png"
+              className="object-cover max-w-[85%] max-h-[85%]"
+            />
+            {/* <p>Front End Developer Portfolio</p> */}
             <p className="content text-xl bg-linear-to-br from-[#095297] to-[#1872c6] bg-clip-text text-transparent">
-              Scroll down to see what I've been up to
+              {/* Scroll down to see what I've been up to */}
             </p>
           </div>
         </div>
@@ -129,7 +133,7 @@ function App() {
           style={{
             position: "absolute",
             inset: 0,
-            background: "#282c20",
+            background: "rgb(40,44,32)",
             pointerEvents: "none",
             zIndex: 2,
             opacity: 0,
@@ -141,30 +145,22 @@ function App() {
 
       <div className="h-screen"></div>
 
-      <section className="h-screen bg-gray-100 flex items-center justify-center p-8 relative z-0">
+      <section className="h-screen bg-[#282c20] flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6 text-gray-800">
-            Section 1: Introduction
-          </h2>
-          <p className="text-lg leading-relaxed">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          <TextReveal text="Section 1: Introduction" className="text-4xl font-bold mb-6 uppercase" />
+          <TextReveal text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
             aliquip ex ea commodo consequat. Duis aute irure dolor in
             reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
             pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p className="text-lg leading-relaxed mt-4">
-            This is filler content to give you plenty of vertical space. Keep
-            scrolling—Lenis should make it feel effortless!
-          </p>
+            culpa qui officia deserunt mollit anim id est laborum." className="text-lg leading-relaxed" />
         </div>
       </section>
 
-      <section className="h-screen bg-white flex items-center justify-center p-8 relative z-0">
+      <section className="h-screen bg-[#282c20] flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6 text-gray-800">
+          <h2 className="text-4xl font-bold mb-6">
             Section 2: Features
           </h2>
           <ul className="text-left max-w-2xl mx-auto text-lg space-y-4">
@@ -197,9 +193,9 @@ function App() {
         </div>
       </section>
 
-      <section className="h-screen bg-gray-200 flex items-center justify-center p-8 relative z-0">
+      <section className="h-screen bg-[#282c20] flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6 text-gray-800">
+          <h2 className="text-4xl font-bold mb-6">
             Section 3: Why Lenis?
           </h2>
           <p className="text-lg leading-relaxed">
@@ -232,7 +228,7 @@ function App() {
         </div>
       </section>
 
-      <section className="h-screen bg-blue-50 flex items-center justify-center p-8 relative z-0">
+      <section className="h-screen bg-[#282c20] flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-6 text-gray-800">
             Footer Section
