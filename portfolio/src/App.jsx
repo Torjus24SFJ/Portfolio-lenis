@@ -1,32 +1,77 @@
-import './App.css';  
-import 'lenis/dist/lenis.css';
-import { useEffect, useRef } from 'react';
-import Lenis from 'lenis';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import "./App.css";
+import "lenis/dist/lenis.css";
+import { useEffect, useRef } from "react";
+import Lenis from "lenis";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
-  const headerRef = useRef(null);  
+  const headerRef = useRef(null);
   const lenisRef = useRef(null);
 
   useEffect(() => {
     if (headerRef.current) {
       gsap.to(headerRef.current, {
         scale: 0.5,
-        ease: 'none',
+        ease: "none",
         scrollTrigger: {
           trigger: headerRef.current,
-          start: 'top top',
-          end: '50% top',  
-          scrub: true,     
-          
+          start: "top top",
+          end: "top -100%",
+          scrub: true,
+          pin: true,
+          onLeave: () => {
+            headerRef.current.style.position = "static";
+          },
+          onEnterBack: () => {
+            headerRef.current.style.position = "fixed";
+          },
         },
       });
     }
 
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, []);
+
+  useEffect(() => {
+  const canvas = document.getElementById("bg-canvas");
+  const ctx = canvas.getContext("2d");
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  let particles = Array.from({ length: 40 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: 8 + Math.random() * 16,
+    dx: -0.5 + Math.random(),
+    dy: -0.5 + Math.random(),
+  }));
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+      ctx.fillStyle = "rgba(68, 165, 247, 0.3)";
+      ctx.fill();
+      p.x += p.dx;
+      p.y += p.dy;
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  return () => {
+    window.removeEventListener('resize', resizeCanvas);
+  };
+}, []);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -59,7 +104,7 @@ function App() {
   };
 
   return (
-    <>
+    <div>
       <header
         ref={headerRef}
         className="fixed top-0 left-0 w-full h-screen overflow-hidden bg-black z-10"
@@ -69,55 +114,84 @@ function App() {
             <h1 className="font-bold text-6xl mb-4 bg-linear-to-br from-[#095297] to-[#1872c6] bg-clip-text text-transparent">
               Front End Developer Portfolio
             </h1>
-            <p className="text-xl bg-linear-to-br from-[#095297] to-[#1872c6] bg-clip-text text-transparent">
+            <p className="content text-xl bg-linear-to-br from-[#095297] to-[#1872c6] bg-clip-text text-transparent">
               Scroll down to see what I've been up to
             </p>
           </div>
         </div>
       </header>
+      <canvas id="bg-canvas">
+
+      </canvas>
 
       <div className="h-screen"></div>
 
       <section className="h-screen bg-gray-100 flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6 text-gray-800">Section 1: Introduction</h2>
+          <h2 className="text-4xl font-bold mb-6 text-gray-800">
+            Section 1: Introduction
+          </h2>
           <p className="text-lg leading-relaxed">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+            culpa qui officia deserunt mollit anim id est laborum.
           </p>
           <p className="text-lg leading-relaxed mt-4">
-            This is filler content to give you plenty of vertical space. Keep scrolling—Lenis should make it feel effortless!
+            This is filler content to give you plenty of vertical space. Keep
+            scrolling—Lenis should make it feel effortless!
           </p>
         </div>
       </section>
 
       <section className="h-screen bg-white flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6 text-gray-800">Section 2: Features</h2>
+          <h2 className="text-4xl font-bold mb-6 text-gray-800">
+            Section 2: Features
+          </h2>
           <ul className="text-left max-w-2xl mx-auto text-lg space-y-4">
             <li className="flex items-center">
-              • <span className="ml-2">Ultra-smooth animations with customizable easing</span>
+              •{" "}
+              <span className="ml-2">
+                Ultra-smooth animations with customizable easing
+              </span>
             </li>
             <li className="flex items-center">
-              • <span className="ml-2">Touch and wheel support out of the box</span>
+              •{" "}
+              <span className="ml-2">
+                Touch and wheel support out of the box
+              </span>
             </li>
             <li className="flex items-center">
               • <span className="ml-2">Lightweight—no heavy dependencies</span>
             </li>
             <li className="flex items-center">
-              • <span className="ml-2">Perfect for React, Vue, or vanilla JS</span>
+              •{" "}
+              <span className="ml-2">
+                Perfect for React, Vue, or vanilla JS
+              </span>
             </li>
           </ul>
           <p className="text-lg mt-6 italic">
-            More lorem ipsum: Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+            More lorem ipsum: Sed ut perspiciatis unde omnis iste natus error
+            sit voluptatem accusantium doloremque laudantium.
           </p>
         </div>
       </section>
 
       <section className="h-screen bg-gray-200 flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6 text-gray-800">Section 3: Why Lenis?</h2>
+          <h2 className="text-4xl font-bold mb-6 text-gray-800">
+            Section 3: Why Lenis?
+          </h2>
           <p className="text-lg leading-relaxed">
-            In a world of janky scroll behaviors, Lenis stands out by hijacking native scroll events and transforming them into silky-smooth motion. It's battle-tested in production sites and easy to drop into your project.
+            In a world of janky scroll behaviors, Lenis stands out by hijacking
+            native scroll events and transforming them into silky-smooth motion.
+            It's battle-tested in production sites and easy to drop into your
+            project.
           </p>
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md">
@@ -137,16 +211,20 @@ function App() {
             </div>
           </div>
           <p className="text-lg mt-4">
-            Final filler: At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum.
+            Final filler: At vero eos et accusamus et iusto odio dignissimos
+            ducimus qui blanditiis praesentium voluptatum.
           </p>
         </div>
       </section>
 
       <section className="h-screen bg-blue-50 flex items-center justify-center p-8 relative z-0">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6 text-gray-800">Footer Section</h2>
+          <h2 className="text-4xl font-bold mb-6 text-gray-800">
+            Footer Section
+          </h2>
           <p className="text-xl">
-            You've reached the end! Smooth scrolling magic courtesy of Lenis. Tweak the options in the useEffect to experiment.
+            You've reached the end! Smooth scrolling magic courtesy of Lenis.
+            Tweak the options in the useEffect to experiment.
           </p>
           <button
             onClick={scrollToTop}
@@ -156,7 +234,7 @@ function App() {
           </button>
         </div>
       </section>
-    </>
+    </div>
   );
 }
 
