@@ -8,6 +8,11 @@
   --font-cinzel: Cinzel, "sans-serif";
 }
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 #bg-canvas {
   position: fixed;
   top: 0;

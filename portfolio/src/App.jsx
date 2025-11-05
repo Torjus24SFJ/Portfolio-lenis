@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TextReveal from "./components/TextReveal";
+import InfiniteText from "./components/InfiniteText";
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
@@ -100,32 +101,36 @@ function App() {
     };
   }, []);
 
-  const scrollToTop = () => {
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, {
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        lerp: 0.1,
-      });
-    }
-  };
+  // const scrollToTop = () => {
+  //   if (lenisRef.current) {
+  //     lenisRef.current.scrollTo(0, {
+  //       duration: 1.2,
+  //       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  //       lerp: 0.1,
+  //     });
+    // }
+  // };
 
   return (
     <div className="bg-[#282c20] text-[#3669a8]">
+      <InfiniteText
+      text="I am a man of my words, but i don't speak them I am a man of my words, but i don't speak them"
+      className="absolute top-1/2 w-full text-center font-bold uppercase text-[#a4c609] z-0"
+    />
+      {/* <InfiniteText
+      text="I am a man of my words, but i don't speak them I am a man of my words, but i don't speak them"
+      className="absolute top-1/2 w-full text-center font-bold uppercase text-[#fcfcfc] z-0"
+    /> */}
       <header
         ref={headerRef}
-        className="fixed top-0 left-0 w-full h-screen overflow-hidden bg-black z-10"
+        className="fixed top-0 left-0 w-full h-screen overflow-hidden z-10"
       >
-        <div className="w-full h-full flex items-center justify-center text-white bg-[#fcfcfc]">
+        <div className="w-full h-full flex items-center justify-center bg-[#fcfcfc]">
           <div className="text-center p-8 flex justify-center items-center">
             <img
               src="/images/test-image.png"
-              className="object-cover max-w-[85%] max-h-[85%]"
+              className="object-cover max-w-[85%] max-h-[75%]"
             />
-            {/* <p>Front End Developer Portfolio</p> */}
-            <p className="content text-xl bg-linear-to-br from-[#095297] to-[#1872c6] bg-clip-text text-transparent">
-              {/* Scroll down to see what I've been up to */}
-            </p>
           </div>
         </div>
         <div
@@ -141,116 +146,36 @@ function App() {
           }}
         ></div>
       </header>
-      <canvas id="bg-canvas"></canvas>
+      {/* <canvas id="bg-canvas"></canvas> */}
 
-      <div className="h-screen"></div>
-
-      <section className="h-screen bg-[#282c20] flex items-center justify-center p-8 relative z-0">
+      <section className="h-screen bg-[#282c20] flex items-center justify-center p-8 relative">
         <div className="max-w-4xl mx-auto text-center text-white text-6xl font-bold mb-6 uppercase">
           <TextReveal
             text={["Redefining", "limits"]}
             fonts={["font-cinzel", "font-sans"]}
-           />
+          />
           <TextReveal
             text={["Fighting for", "wins"]}
             fonts={["font-sans", "font-cinzel"]}
-           />
+          />
           <TextReveal text="Bringing it all in" />
           <TextReveal text="All ways. Defining a" />
           <TextReveal
             text={["Legacy", "in formula 1"]}
             fonts={["font-cinzel", "font-sans"]}
-           />
+          />
           <TextReveal text="On and off the" />
           <TextReveal text="Track" />
         </div>
       </section>
-
-      <section className="h-screen bg-[#282c20] flex items-center justify-center p-8 relative z-0">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6">Section 2: Features</h2>
-          <ul className="text-left max-w-2xl mx-auto text-lg space-y-4">
-            <li className="flex items-center">
-              •{" "}
-              <span className="ml-2">
-                Ultra-smooth animations with customizable easing
-              </span>
-            </li>
-            <li className="flex items-center">
-              •{" "}
-              <span className="ml-2">
-                Touch and wheel support out of the box
-              </span>
-            </li>
-            <li className="flex items-center">
-              • <span className="ml-2">Lightweight—no heavy dependencies</span>
-            </li>
-            <li className="flex items-center">
-              •{" "}
-              <span className="ml-2">
-                Perfect for React, Vue, or vanilla JS
-              </span>
-            </li>
-          </ul>
-          <p className="text-lg mt-6 italic">
-            More lorem ipsum: Sed ut perspiciatis unde omnis iste natus error
-            sit voluptatem accusantium doloremque laudantium.
-          </p>
-        </div>
-      </section>
-
-      <section className="h-screen bg-[#282c20] flex items-center justify-center p-8 relative z-0">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6">Section 3: Why Lenis?</h2>
-          <p className="text-lg leading-relaxed">
-            In a world of janky scroll behaviors, Lenis stands out by hijacking
-            native scroll events and transforming them into silky-smooth motion.
-            It's battle-tested in production sites and easy to drop into your
-            project.
-          </p>
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-2xl font-semibold mb-2">Pros</h3>
-              <ul className="text-left space-y-1">
-                <li>• High performance</li>
-                <li>• Infinite scrolling support</li>
-                <li>• Syncs with CSS scroll-snap</li>
-              </ul>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-2xl font-semibold mb-2">Cons</h3>
-              <ul className="text-left space-y-1">
-                <li>• Requires JS for full effect</li>
-                <li>• Minor setup for frameworks</li>
-              </ul>
-            </div>
-          </div>
-          <p className="text-lg mt-4">
-            Final filler: At vero eos et accusamus et iusto odio dignissimos
-            ducimus qui blanditiis praesentium voluptatum.
-          </p>
-        </div>
-      </section>
-
-      <section className="h-screen bg-[#282c20] flex items-center justify-center p-8 relative z-0">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6 text-gray-800">
-            Footer Section
-          </h2>
-          <p className="text-xl">
-            You've reached the end! Smooth scrolling magic courtesy of Lenis.
-            Tweak the options in the useEffect to experiment.
-          </p>
-          <button
+          {/* <button
             onClick={scrollToTop}
-            className="mt-6 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            className="mt-6 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center"
           >
             Back to Top (Scroll Up!)
-          </button>
+          </button> */}
         </div>
-      </section>
-    </div>
-  );
-}
+  )
+};
 
 export default App;
