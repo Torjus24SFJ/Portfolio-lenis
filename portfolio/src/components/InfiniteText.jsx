@@ -1,34 +1,51 @@
-import { useEffect, useRef } from "react";
+import { forwardRef, useRef, useEffect } from "react";
 import { gsap } from "gsap";
-import "../App.css";
-export default function InfiniteText({
-  text = " ",
-  speed = 10,
-  className = ""
-}) {
-  const containerRef = useRef(null);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+const InfiniteText = forwardRef(
+  ({ text = "", speed = 20, className = "" }, ref) => {
+    const localRef = useRef(null);
+    const container = ref || localRef;
+    const animRef = useRef(null);
 
-    const animation = gsap.to(container, {
-      xPercent: -50,
-      repeat: -1,
-      duration: speed,
-      ease: "linear",
-    });
+    useEffect(() => {
+      const el = container.current;
+      const txt = el?.firstChild;
+      if (!el || !txt) return;
 
-    return () => animation.kill();
-  }, [speed]);
+      if (animRef.current) animRef.current.kill();
 
-  return (
-    <div
-      ref={containerRef}
-      className={`absolute flex items-center justify-center whitespace-nowrap z-0 text-4xl ${className}`}
-    >
-      <span>{text}</span>
-      <span>{text}</span>
-    </div>
-  );
-}
+      txt.style.display = "block";
+      const height = txt.offsetHeight;
+
+      gsap.set(txt, { y: height });
+
+      animRef.current = gsap.to(txt, {
+        y: -height,
+        duration: speed,
+        ease: "none",
+        repeat: -1,
+        modifiers: {
+          y: gsap.utils.unitize((y) => parseFloat(y) % height),
+        },
+      });
+
+      return () => animRef.current?.kill();
+    }, [text, speed, container]);
+
+    return (
+      <div
+        ref={container}
+        className={`overflow-hidden ${className}`}
+        style={{ display: "block" }}
+      >
+        <div className="block">
+          {text}
+          <br />
+        </div>
+      </div>
+    );
+  }
+);
+
+InfiniteText.displayName = "InfiniteText";
+export default InfiniteText;
