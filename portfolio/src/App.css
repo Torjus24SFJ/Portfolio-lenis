@@ -1,15 +1,37 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: MonoSans;
-  src: url(/fonts/MonaSans-VariableFont_wdth\,wght.ttf);
-  font-weight: 700;
+  font-family: 'Dmsans';
+  src: url('https://cdn.prod.website-files.com/681b040781d5b5e278a69989/6825c4782f01439b46fbc80d_DMSans-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @theme {
   --font-monosans: MonoSans, "sans-serif";
+  --font-dmsans: DMSans, "sans-serif";
 }
 
+.wrapper {
+  background-image: url('/images/p6.png');
+  background-repeat: repeat;
+  background-size: auto;
+}
+
+.wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(219, 227, 231), rgba(255, 255, 255, 0));
+  mix-blend-mode: multiply;
+}
+
+.image-container {
+  background: linear-gradient(0deg, rgb(203, 216, 207), rgba(255, 255, 255, 0));
+  mix-blend-mode: multiply;
+  background-size: 100% 100%;
+}
 
 .reveal-text .mask {
   position: absolute;
